@@ -47,6 +47,10 @@ func (e *Verifier) do(r *http.Request, i *identity.Identity, f flow.Flow) error 
 	// Ths is called after the identity has been created so we can safely assume that all addresses are available
 	// already.
 
+	if !e.r.Config().SelfServiceFlowVerificationSendEnabled(r.Context()) {
+		return nil
+	}
+
 	for k := range i.VerifiableAddresses {
 		address := &i.VerifiableAddresses[k]
 		if address.Status != identity.VerifiableAddressStatusPending {
